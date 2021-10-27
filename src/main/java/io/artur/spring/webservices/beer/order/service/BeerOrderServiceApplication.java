@@ -1,4 +1,4 @@
-package io.artur.spring.webservices.msscbeerorderservice;
+package io.artur.spring.webservices.beer.order.service;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
