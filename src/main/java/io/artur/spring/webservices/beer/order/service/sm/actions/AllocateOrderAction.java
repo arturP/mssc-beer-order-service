@@ -10,6 +10,7 @@ import io.artur.spring.webservices.beer.order.service.web.mappers.BeerOrderMappe
 import io.artur.spring.webservices.brewery.model.events.AllocateOrderRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Primary;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.action.Action;
@@ -21,6 +22,7 @@ import java.util.UUID;
 /**
  *
  */
+@Primary
 @Slf4j
 @Component
 @RequiredArgsConstructor
