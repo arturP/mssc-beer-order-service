@@ -23,7 +23,6 @@ public class BeerOrderAllocationListener {
     @JmsListener(destination = JmsConfig.ALLOCATE_ORDER_QUEUE)
     public void listen(Message message){
 
-        System.out.println(" +++++++++++++++++++++++++++++++ allocation order processing ----------------");
         AllocateOrderRequest request = (AllocateOrderRequest) message.getPayload();
         boolean pendingInventory = false;
         boolean allocationError = false;

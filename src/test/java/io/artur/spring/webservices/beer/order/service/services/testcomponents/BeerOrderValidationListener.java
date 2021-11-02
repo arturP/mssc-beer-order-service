@@ -25,7 +25,6 @@ public class BeerOrderValidationListener {
     public void listen(Message message) {
 
         ValidateOrderRequest request = (ValidateOrderRequest)message.getPayload();
-        System.out.println("################################## listen processing ################");
 
         jmsTemplate.convertAndSend(JmsConfig.VALIDATE_ORDER_RESPONSE_QUEUE,
                 ValidateOrderResult.builder()
