@@ -2,6 +2,7 @@ package io.artur.spring.webservices.beer.order.service.sm;
 
 import io.artur.spring.webservices.beer.order.service.domain.BeerOrderEventEnum;
 import io.artur.spring.webservices.beer.order.service.domain.BeerOrderStatusEnum;
+import io.artur.spring.webservices.beer.order.service.sm.actions.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.statemachine.action.Action;
@@ -21,11 +22,11 @@ import java.util.EnumSet;
 public class BeerOrderStateMachineConfig
         extends StateMachineConfigurerAdapter<BeerOrderStatusEnum, BeerOrderEventEnum> {
 
-    private final Action<BeerOrderStatusEnum, BeerOrderEventEnum> validateOrderAction;
-    private final Action<BeerOrderStatusEnum, BeerOrderEventEnum>  allocateOrderAction;
-    private final Action<BeerOrderStatusEnum, BeerOrderEventEnum>  validationFailureAction;
-    private final Action<BeerOrderStatusEnum, BeerOrderEventEnum>  allocationFailureAction;
-    private final Action<BeerOrderStatusEnum, BeerOrderEventEnum>  deallocateOrderAction;
+    private final ValidateOrderAction validateOrderAction;
+    private final AllocateOrderAction allocateOrderAction;
+    private final ValidationFailureAction validationFailureAction;
+    private final AllocationFailureAction allocationFailureAction;
+    private final DeallocateOrderAction deallocateOrderAction;
 
     @Override
     public void configure(StateMachineStateConfigurer<BeerOrderStatusEnum, BeerOrderEventEnum> states) throws Exception {

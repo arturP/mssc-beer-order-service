@@ -22,7 +22,6 @@ import java.util.UUID;
 /**
  *
  */
-@Primary
 @Slf4j
 @Component
 @RequiredArgsConstructor
