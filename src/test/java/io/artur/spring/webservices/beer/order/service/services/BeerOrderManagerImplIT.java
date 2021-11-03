@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.jenspiegsa.wiremockextension.WireMockExtension;
 import com.github.tomakehurst.wiremock.WireMockServer;
-import com.github.tomakehurst.wiremock.client.WireMock;
 import io.artur.spring.webservices.beer.order.service.domain.BeerOrder;
 import io.artur.spring.webservices.beer.order.service.domain.BeerOrderLine;
 import io.artur.spring.webservices.beer.order.service.domain.BeerOrderStatusEnum;
@@ -13,9 +12,6 @@ import io.artur.spring.webservices.beer.order.service.repositories.BeerOrderRepo
 import io.artur.spring.webservices.beer.order.service.repositories.CustomerRepository;
 import io.artur.spring.webservices.beer.order.service.services.beer.BeerServiceImpl;
 import io.artur.spring.webservices.brewery.model.BeerDto;
-import io.artur.spring.webservices.brewery.model.BeerOrderDto;
-import io.artur.spring.webservices.brewery.model.BeerOrderPagedList;
-import io.artur.spring.webservices.brewery.model.BeerPagedList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -153,4 +148,24 @@ class BeerOrderManagerImplIT {
         assertNotNull(pickedUpOrder);
         assertEquals(BeerOrderStatusEnum.PICKED_UP, pickedUpOrder.getOrderStatus());
     }
+
+    @Test
+    void validationFailedTest() throws JsonProcessingException {
+        BeerDto beerDto = BeerDto.builder().id(beerId).upc("121222").build();
+
+        wireMockServer.stubFor(get(BeerServiceImpl.BEER_UPC_PATH_V1 + "121222")
+                .willReturn(okJson(objectMapper.writeValueAsString(beerDto))));
+        BeerOrder beerOrder = createBeerOrder();
+        beerOrder.setCustomerRef("fail-validation");
+
+        BeerOrder savedBeerOrder = beerOrderManager.newBeerOrder(beerOrder);
+
+        await().untilAsserted(() -> {
+            BeerOrder foundOrder = beerOrderRepository.findById(beerOrder.getId()).get();
+            assertEquals(BeerOrderStatusEnum.VALIDATION_EXCEPTION, foundOrder.getOrderStatus());
+        });
+
+
+    }
+
 }
