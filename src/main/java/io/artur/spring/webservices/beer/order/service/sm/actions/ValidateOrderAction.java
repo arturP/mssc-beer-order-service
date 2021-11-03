@@ -35,6 +35,9 @@ public class ValidateOrderAction implements Action<BeerOrderStatusEnum, BeerOrde
         String beerOrderId = (String) context.getMessage().getHeaders().get(BeerOrderManagerImpl.ORDER_ID_HEADER);
         Optional<BeerOrder> beerOrderOptional = beerOrderRepository.findById(UUID.fromString(beerOrderId));
 
+        System.out.println("2) order retrieved from repository in validateOrderAction - id: " + beerOrderOptional.get().getId());
+        System.out.println("2a) beerOrderId is " + beerOrderId);
+        System.out.println("2b) Repo count = " + beerOrderRepository.findAll().size());
         beerOrderOptional.ifPresentOrElse(beerOrder -> {
             jmsTemplate.convertAndSend(JmsConfig.VALIDATE_ORDER_QUEUE, ValidateOrderRequest.builder()
                     .beerOrder(beerOrderMapper.beerOrderToDto(beerOrder))
